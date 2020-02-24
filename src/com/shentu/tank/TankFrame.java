@@ -8,6 +8,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class TankFrame extends Frame {
+	boolean up = false;
+	boolean down = false;
+	boolean left = false;
+	boolean right = false;
 	int x = 200;
 	int y = 200;
 	
@@ -34,10 +38,49 @@ public class TankFrame extends Frame {
 	
 	class MyKeyMonitor extends KeyAdapter {
 		@Override
-		public void keyPressed(KeyEvent e) {
-			x += 20;
-			repaint();
+		public void keyReleased(KeyEvent e) {
+			int key = e.getKeyCode();
+			switch (key) {
+			case KeyEvent.VK_UP:
+				up = false;
+				break;
+			case KeyEvent.VK_DOWN:
+				down = false;
+				break;
+			case KeyEvent.VK_LEFT:
+				left = false;
+				break;
+			case KeyEvent.VK_RIGHT:
+				right = false;
+				break;
+
+			default:
+				break;
+			}
 		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			int key = e.getKeyCode();
+			switch (key) {
+			case KeyEvent.VK_UP:
+				up = true;
+				break;
+			case KeyEvent.VK_DOWN:
+				down = true;
+				break;
+			case KeyEvent.VK_LEFT:
+				left = true;
+				break;
+			case KeyEvent.VK_RIGHT:
+				right = true;
+				break;
+
+			default:
+				break;
+			}
+		}
+		
 	}
 
 }

@@ -52,12 +52,19 @@ public class TankFrame extends Frame {
 		g.drawImage(offScreenImage,0,0,null);
 	}
 	
+	//解决容器可能内存溢出问题
 	public void paint(Graphics g) {
 		tank.paint(g);
-		for (Bullet bullet : bullets) {
+		for (Iterator i = bullets.iterator(); i.hasNext();) {
+			Bullet bullet = (Bullet) i.next();
+			if (!bullet.isLive()) {
+				i.remove();
+				continue;
+			}
 			bullet.paint(g);
 		}
 	}
+	
 	
 	
 	class TankKeyMonitor extends KeyAdapter {

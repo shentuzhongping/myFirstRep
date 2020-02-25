@@ -69,7 +69,7 @@ public class Tank {
 		}
 	}
 	public void fire() {
-		tf.bullets.add(new Bullet(x, y, dir));
+		tf.bullets.add(new Bullet(x+10, y+10, dir,tf));
 	}
 	
 	

@@ -54,11 +54,23 @@ public class Bullet {
 	
 	
 	public void paint(Graphics g) {
-		Color c = g.getColor();
-		g.setColor(Color.red);
-		g.fillOval(x, y, 30, 30);
+		switch (dir) {
+		case UP:
+			g.drawImage(ResourceMagr.bulletU, x, y, null);
+			break;
+		case DOWN:
+			g.drawImage(ResourceMagr.bulletD, x, y, null);
+			break;
+		case LEFT:
+			g.drawImage(ResourceMagr.bulletL, x, y, null);
+			break;
+		case RIGHT:
+			g.drawImage(ResourceMagr.bulletR, x, y, null);
+			break;
+		default:
+			break;
+		}
 		move();
-		g.setColor(c);
 	}
 	
 	public void move() {

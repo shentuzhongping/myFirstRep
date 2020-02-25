@@ -1,5 +1,6 @@
 package com.shentu.tank;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class Tank {
@@ -8,10 +9,12 @@ public class Tank {
 	private Dir dir;
 	private boolean moving = false;
 	private static final int speed = 5;
-	Tank (int x,int y, Dir dir) {
+	private TankFrame tf;
+	Tank (int x,int y, Dir dir,TankFrame tf) {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
+		this.tf = tf;
 	}
 	public int getX() {
 		return x;
@@ -38,8 +41,11 @@ public class Tank {
 		this.moving = moving;
 	}
 	
-	public void paint(Graphics g) {
+	public void paint(Graphics g) {	
+		Color c = g.getColor();
+		g.setColor(Color.YELLOW);
 		g.fillRect(x, y, 50, 50);
+		g.setColor(c);
 		move();
 	}
 	
@@ -61,6 +67,9 @@ public class Tank {
 		default:
 			break;
 		}
+	}
+	public void fire() {
+		tf.bullets.add(new Bullet(x, y, dir));
 	}
 	
 	

@@ -21,6 +21,7 @@ public class TankFrame extends Frame {
 	
 	Tank tank = new Tank(200,200,Dir.DOWN,this);
 	List<Bullet> bullets = new ArrayList<>();
+	static List<Tank> enemyTanks = new ArrayList<>();
 	TankFrame () {
 		setSize(800,600);
 		setResizable(false);
@@ -55,12 +56,27 @@ public class TankFrame extends Frame {
 	//解决容器可能内存溢出问题
 	public void paint(Graphics g) {
 		tank.paint(g);
-		for (Iterator i = bullets.iterator(); i.hasNext();) {
-			Bullet bullet = (Bullet) i.next();
-			if (!bullet.isLive()) {
+		for (int i = 0; i < bullets.size(); i++) {
+			for (int j = 0; j < enemyTanks.size(); j++) {
+				bullets.get(i).collideWith(enemyTanks.get(j));
+			}
+		}
+
+		for (Iterator i = enemyTanks.iterator(); i.hasNext();) {
+			Tank tank = (Tank) i.next();
+			if (!tank.isLiving()) {
 				i.remove();
 				continue;
 			}
+			tank.paint(g);
+		}
+		for (Iterator i = bullets.iterator(); i.hasNext();) {
+			Bullet bullet = (Bullet) i.next();
+			if (!bullet.isLiving()) {
+				i.remove();
+				continue;
+			}
+			
 			bullet.paint(g);
 		}
 	}

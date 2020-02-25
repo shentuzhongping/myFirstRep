@@ -2,23 +2,24 @@ package com.shentu.tank;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 public class Bullet {
 	private int x;
 	private int y;
 	private Dir dir;
 	private static final int speed = 10;
-	private boolean live = true;
+	private boolean living = true;
+	public boolean isLiving() {
+		return living;
+	}
+	public boolean getLiving() {
+		return living;
+	}
+
 	public static int width = ResourceMagr.bulletD.getWidth();
 	public static int height = ResourceMagr.bulletD.getHeight();
 	
-	public boolean isLive() {
-		return live;
-	}
-
-	public void setLive(boolean live) {
-		this.live = live;
-	}
 
 	private TankFrame tf;
 	
@@ -93,7 +94,21 @@ public class Bullet {
 			break;
 		}
 		if (x < 0 || y < 0 || x > tf.GAME_WIDTH || y > tf.GAME_HEIGHT) {
-			this.live = false;
+			this.living = false;
+		}
+	}
+	
+	public void die() {
+		this.living = false;
+	}
+	
+	
+	public void collideWith (Tank t) {
+		Rectangle rect1 = new Rectangle(t.getX(),t.getY(),t.width,t.height);
+		Rectangle rect2 = new Rectangle(x,y,width,height);
+		if (rect1.intersects(rect2)) {
+			t.die();
+			this.die();
 		}
 	}
 

@@ -8,10 +8,20 @@ public class Tank {
 	private int y;
 	private Dir dir;
 	private boolean moving = false;
+	
 	private static final int speed = 5;
 	private TankFrame tf;
+	
 	public static int width = ResourceMagr.tankD.getWidth();
 	public static int height = ResourceMagr.tankD.getHeight();
+	
+	private boolean living = true;
+	public boolean isLiving() {
+		return living;
+	}
+	public boolean getLiving() {
+		return living;
+	}
 	Tank (int x,int y, Dir dir,TankFrame tf) {
 		this.x = x;
 		this.y = y;
@@ -86,6 +96,9 @@ public class Tank {
 		int bx = x + width/2 - Bullet.width/2;
 		int by = y + height/2 - Bullet.height/2;
 		tf.bullets.add(new Bullet(bx, by, dir,tf));
+	}
+	public void die() {
+		this.living = false;
 	}
 	
 	

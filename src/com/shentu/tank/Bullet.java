@@ -1,6 +1,5 @@
 package com.shentu.tank;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -10,6 +9,7 @@ public class Bullet {
 	private Dir dir;
 	private static final int speed = 10;
 	private boolean living = true;
+	private Group group;
 	public boolean isLiving() {
 		return living;
 	}
@@ -23,10 +23,11 @@ public class Bullet {
 
 	private TankFrame tf;
 	
-	Bullet (int x, int y, Dir dir,TankFrame tf) {
+	Bullet (int x, int y, Dir dir,Group group,TankFrame tf) {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
+		this.group = group;
 		this.tf = tf;
 	}
 	
@@ -104,8 +105,9 @@ public class Bullet {
 	
 	
 	public void collideWith (Tank t) {
+		if (this.group == t.getGroup()) return;
 		Rectangle rect1 = new Rectangle(t.getX(),t.getY(),t.width,t.height);
-		Rectangle rect2 = new Rectangle(x,y,width,height);
+		Rectangle rect2 = new Rectangle(x+width/2,y+width/2,1,1);
 		if (rect1.intersects(rect2)) {
 			t.die();
 			this.die();

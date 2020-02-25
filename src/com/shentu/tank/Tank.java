@@ -1,7 +1,7 @@
 package com.shentu.tank;
 
-import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 public class Tank {
 	private int x;
@@ -9,7 +9,11 @@ public class Tank {
 	private Dir dir;
 	private boolean moving = false;
 	
+	private Group group;
+	
 	private static final int speed = 5;
+	
+	private Random random = new Random();
 	private TankFrame tf;
 	
 	public static int width = ResourceMagr.tankD.getWidth();
@@ -22,10 +26,12 @@ public class Tank {
 	public boolean getLiving() {
 		return living;
 	}
-	Tank (int x,int y, Dir dir,TankFrame tf) {
+	Tank (int x,int y, Dir dir,boolean moving,Group group,TankFrame tf) {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
+		this.moving = moving;
+		this.group = group;
 		this.tf = tf;
 	}
 	public int getX() {
@@ -45,6 +51,13 @@ public class Tank {
 	}
 	public void setDir(Dir dir) {
 		this.dir = dir;
+	}
+	
+	public Group getGroup() {
+		return group;
+	}
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 	public boolean isMoving() {
 		return moving;
@@ -91,11 +104,16 @@ public class Tank {
 		default:
 			break;
 		}
+		
+		if (random.nextInt(10) > 8) {	
+			this.fire();
+		}
+		
 	}
 	public void fire() {
 		int bx = x + width/2 - Bullet.width/2;
 		int by = y + height/2 - Bullet.height/2;
-		tf.bullets.add(new Bullet(bx, by, dir,tf));
+		tf.bullets.add(new Bullet(bx, by, dir,this.group,tf));
 	}
 	public void die() {
 		this.living = false;

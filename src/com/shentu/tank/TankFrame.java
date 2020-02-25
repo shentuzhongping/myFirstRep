@@ -19,9 +19,11 @@ public class TankFrame extends Frame {
 	boolean right = false;
 	final int GAME_WIDTH = 800,GAME_HEIGHT = 600;
 	
-	Tank tank = new Tank(200,200,Dir.DOWN,false,Group.good,this);
+	Tank tank = new Tank(200,200,Dir.UP,3,Group.good,this);
 	List<Bullet> bullets = new ArrayList<>();
 	static List<Tank> enemyTanks = new ArrayList<>();
+	
+	Explode explode;
 	TankFrame () {
 		setSize(800,600);
 		setResizable(false);
@@ -55,9 +57,9 @@ public class TankFrame extends Frame {
 	
 	//解决容器可能内存溢出问题
 	public void paint(Graphics g) {
+//		explode.paint(g);
 		tank.paint(g);
 		
-
 		for (Iterator i = enemyTanks.iterator(); i.hasNext();) {
 			Tank tank = (Tank) i.next();
 			if (!tank.isLiving()) {
@@ -81,6 +83,12 @@ public class TankFrame extends Frame {
 				bullets.get(i).collideWith(enemyTanks.get(j));
 			}
 		}
+		
+		if(explode != null) {
+			explode.paint(g);
+			if(!explode.isLiving()) explode = null;
+		}
+		
 	}
 	
 	

@@ -6,7 +6,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class ResourceMagr {
-	static BufferedImage tankU,tankD,tankL,tankR,bulletU,bulletD,bulletL,bulletR;
+	static BufferedImage tankU,tankD,tankL,tankR;
+	static BufferedImage bulletU,bulletD,bulletL,bulletR;
+	static BufferedImage[] explodes = new BufferedImage[16];
 	
 	static {
 		try {
@@ -18,6 +20,9 @@ public class ResourceMagr {
 			bulletD = ImageIO.read(ResourceMagr.class.getClassLoader().getResourceAsStream("images/bulletD.gif"));
 			bulletL = ImageIO.read(ResourceMagr.class.getClassLoader().getResourceAsStream("images/bulletL.gif"));
 			bulletR = ImageIO.read(ResourceMagr.class.getClassLoader().getResourceAsStream("images/bulletR.gif"));
+			for (int i = 0; i < 16; i++) {
+				explodes[i] = ImageIO.read(ResourceMagr.class.getClassLoader().getResourceAsStream("images/e" + (i + 1) +".gif"));
+			}
 					
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

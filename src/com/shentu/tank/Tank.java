@@ -11,7 +11,7 @@ public class Tank {
 	
 	private Group group;
 	
-	private static final int speed = 5;
+	private int speed = 1;
 	
 	private Random random = new Random();
 	private TankFrame tf;
@@ -31,6 +31,15 @@ public class Tank {
 		this.y = y;
 		this.dir = dir;
 		this.moving = moving;
+		this.group = group;
+		this.tf = tf;
+	}
+	
+	Tank (int x,int y, Dir dir,int speed,Group group,TankFrame tf) {
+		this.x = x;
+		this.y = y;
+		this.dir = dir;
+		this.speed = speed;
 		this.group = group;
 		this.tf = tf;
 	}
@@ -104,10 +113,13 @@ public class Tank {
 		default:
 			break;
 		}
-		
-		if (random.nextInt(10) > 8) {	
-			this.fire();
+		//只有敌人的坦克移动的时候才会自动发射子弹
+		if (this.group == Group.bad) {
+			if (random.nextInt(10) > 8) {	
+				this.fire();
+			}
 		}
+		
 		
 	}
 	public void fire() {
@@ -117,6 +129,8 @@ public class Tank {
 	}
 	public void die() {
 		this.living = false;
+		tf.explode = new Explode(x, y);
+		
 	}
 	
 	

@@ -12,12 +12,7 @@ public class TankFrame extends Frame {
 	boolean down = false;
 	boolean left = false;
 	boolean right = false;
-	int x = 200;
-	int y = 200;
-	//刚开始必须要给一个值，如果不给用switch的时候会报空指针
-	Dir dir = Dir.DOWN; 
-	private final int speed = 10;
-	
+	Tank tank = new Tank(200,200,Dir.DOWN);
 	TankFrame () {
 		setSize(800,600);
 		setResizable(false);
@@ -35,38 +30,22 @@ public class TankFrame extends Frame {
 	}
 	
 	public void paint(Graphics g) {
-		g.fillRect(x, y, 50, 50);
-		
-		switch (dir) {
-		case UP:
-			y -= speed;
-			break;
-		case DOWN:
-			y += speed;
-			break;
-		case LEFT:
-			x -= speed;
-			break;
-		case RIGHT:
-			x += speed;
-			break;
-		default:
-			break;
-		}
-		
-		
+		tank.paint(g);
 	}
 	
 	
 	class MyKeyMonitor extends KeyAdapter {
 		
 		private void setMainTankDir() {
-			if(up) dir = Dir.UP;
-			if(down) dir = Dir.DOWN;
-			if(left) dir = Dir.LEFT;
-			if(right) dir = Dir.RIGHT;
-			if(up == false && down == false && left == false && right == false) {
-				dir = Dir.STOP;
+			
+			if(!up && !down && !left && !right) {
+				tank.setMoving(false);
+			} else {
+				tank.setMoving(true);
+				if(up) tank.setDir(Dir.UP);
+				if(down)  tank.setDir(Dir.DOWN);
+				if(left)  tank.setDir(Dir.LEFT);
+				if(right)  tank.setDir(Dir.RIGHT);
 			}
 		}
 		@Override

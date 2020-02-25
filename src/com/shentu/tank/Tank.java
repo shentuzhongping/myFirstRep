@@ -7,7 +7,7 @@ public class Tank {
 	private int y;
 	private Dir dir;
 	private boolean moving = false;
-	private static final int speed = 10;
+	private static final int speed = 5;
 	Tank (int x,int y, Dir dir) {
 		this.x = x;
 		this.y = y;

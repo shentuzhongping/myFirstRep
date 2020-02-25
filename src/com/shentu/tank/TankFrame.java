@@ -13,6 +13,7 @@ public class TankFrame extends Frame {
 	boolean left = false;
 	boolean right = false;
 	Tank tank = new Tank(200,200,Dir.DOWN);
+	Bullet bl = new Bullet(200,200,Dir.DOWN);
 	TankFrame () {
 		setSize(800,600);
 		setResizable(false);
@@ -31,6 +32,8 @@ public class TankFrame extends Frame {
 	
 	public void paint(Graphics g) {
 		tank.paint(g);
+		bl.paint(g);
+		
 	}
 	
 	

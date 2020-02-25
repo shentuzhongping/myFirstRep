@@ -9,6 +9,8 @@ public class Bullet {
 	private Dir dir;
 	private static final int speed = 10;
 	private boolean live = true;
+	public static int width = ResourceMagr.bulletD.getWidth();
+	public static int height = ResourceMagr.bulletD.getHeight();
 	
 	public boolean isLive() {
 		return live;

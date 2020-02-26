@@ -1,6 +1,7 @@
 package com.shentu.tank;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.Random;
 
 public class Tank {
@@ -26,6 +27,9 @@ public class Tank {
 	public boolean getLiving() {
 		return living;
 	}
+	
+	Rectangle rect = new Rectangle(0,0,width,height);
+	
 	Tank (int x,int y, Dir dir,boolean moving,Group group,TankFrame tf) {
 		this.x = x;
 		this.y = y;
@@ -33,6 +37,8 @@ public class Tank {
 		this.moving = moving;
 		this.group = group;
 		this.tf = tf;
+		this.rect.x = x;
+		this.rect.y = y;
 	}
 	
 	Tank (int x,int y, Dir dir,int speed,Group group,TankFrame tf) {
@@ -42,6 +48,8 @@ public class Tank {
 		this.speed = speed;
 		this.group = group;
 		this.tf = tf;
+		this.rect.x = x;
+		this.rect.y = y;
 	}
 	public int getX() {
 		return x;
@@ -95,6 +103,7 @@ public class Tank {
 		move();
 	}
 	
+	
 	public void move() {
 		if (!moving) return;
 		switch (dir) {
@@ -117,15 +126,33 @@ public class Tank {
 			new Thread(() -> new Audio("audio/tank_move.wav").loop()).start();
 		}
 		//只有敌人的坦克移动的时候才会自动发射子弹
-		if (this.group == Group.bad) {
-			if (random.nextInt(100) > 95) {	
-				this.fire();
-			}
+		if (this.group == Group.bad && random.nextInt(100) > 95) {
+			this.fire();
 		}
 		//只有敌人的坦克才会随机换方向
-		if (this.group == Group.bad && random.nextInt(20) > 17) {
+		if (this.group == Group.bad && random.nextInt(100) > 95) {
 			randomDir();
 		}
+		
+		boundsCheck();
+		this.rect.x = x;
+		this.rect.y = y;
+		
+	}
+	private void boundsCheck() {
+		if (x < 2) {
+			x =2;
+		}
+		if (x > tf.GAME_WIDTH - width ) {
+			x = tf.GAME_WIDTH - width;
+		}
+		if ( y < height/2) {
+			y = height/2;
+		}
+		if ( y > tf.GAME_HEIGHT -height) {
+			y = tf.GAME_HEIGHT -height;
+		}
+		
 	}
 	
 	private void randomDir() {

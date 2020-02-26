@@ -20,7 +20,7 @@ public class Bullet {
 	public static int width = ResourceMagr.bulletD.getWidth();
 	public static int height = ResourceMagr.bulletD.getHeight();
 	
-
+	Rectangle rect = new Rectangle(0,0,1,1);
 	private TankFrame tf;
 	
 	Bullet (int x, int y, Dir dir,Group group,TankFrame tf) {
@@ -29,6 +29,8 @@ public class Bullet {
 		this.dir = dir;
 		this.group = group;
 		this.tf = tf;
+		this.rect.x = x + width/2;
+		this.rect.y = y + height/2;
 	}
 	
 	public int getX() {
@@ -97,6 +99,8 @@ public class Bullet {
 		if (x < 0 || y < 0 || x > tf.GAME_WIDTH || y > tf.GAME_HEIGHT) {
 			this.living = false;
 		}
+		this.rect.x = x + width/2;
+		this.rect.y = y + height/2;
 	}
 	
 	public void die() {
@@ -106,9 +110,9 @@ public class Bullet {
 	
 	public void collideWith (Tank t) {
 		if (this.group == t.getGroup()) return;
-		Rectangle rect1 = new Rectangle(t.getX(),t.getY(),t.width,t.height);
-		Rectangle rect2 = new Rectangle(x+width/2,y+width/2,1,1);
-		if (rect1.intersects(rect2)) {
+//		Rectangle rect1 = new Rectangle(t.getX(),t.getY(),t.width,t.height);
+//		Rectangle rect2 = new Rectangle(x+width/2,y+height/2,1,1);
+		if (t.rect.intersects(rect)) {
 			t.die();
 			this.die();
 		}

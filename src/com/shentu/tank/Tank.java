@@ -11,13 +11,13 @@ public class Tank {
 	
 	private Group group;
 	
-	private int speed = 1;
+	private int speed = 2;
 	
 	private Random random = new Random();
 	private TankFrame tf;
 	
-	public static int width = ResourceMagr.tankD.getWidth();
-	public static int height = ResourceMagr.tankD.getHeight();
+	public static int width = ResourceMagr.badTankD.getWidth();
+	public static int height = ResourceMagr.badTankD.getHeight();
 	
 	private boolean living = true;
 	public boolean isLiving() {
@@ -78,16 +78,16 @@ public class Tank {
 	public void paint(Graphics g) {	
 		switch (dir) {
 		case UP:
-			g.drawImage(ResourceMagr.tankU, x, y, null);
+			g.drawImage(this.group == Group.good ? ResourceMagr.goodTankU :ResourceMagr.badTankU, x, y, null);
 			break;
 		case DOWN:
-			g.drawImage(ResourceMagr.tankD, x, y, null);
+			g.drawImage(this.group == Group.good ? ResourceMagr.goodTankD :ResourceMagr.badTankD, x, y, null);
 			break;
 		case LEFT:
-			g.drawImage(ResourceMagr.tankL, x, y, null);
+			g.drawImage(this.group == Group.good ? ResourceMagr.goodTankL :ResourceMagr.badTankL, x, y, null);
 			break;
 		case RIGHT:
-			g.drawImage(ResourceMagr.tankR, x, y, null);
+			g.drawImage(this.group == Group.good ? ResourceMagr.goodTankR :ResourceMagr.badTankR, x, y, null);
 			break;
 		default:
 			break;

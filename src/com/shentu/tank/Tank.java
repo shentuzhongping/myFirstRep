@@ -118,12 +118,18 @@ public class Tank {
 		}
 		//只有敌人的坦克移动的时候才会自动发射子弹
 		if (this.group == Group.bad) {
-			if (random.nextInt(10) > 8) {	
+			if (random.nextInt(100) > 95) {	
 				this.fire();
 			}
 		}
-		
-		
+		//只有敌人的坦克才会随机换方向
+		if (this.group == Group.bad && random.nextInt(20) > 17) {
+			randomDir();
+		}
+	}
+	
+	private void randomDir() {
+		this.dir = Dir.values()[random.nextInt(4)];
 	}
 	public void fire() {
 		int bx = x + width/2 - Bullet.width/2;

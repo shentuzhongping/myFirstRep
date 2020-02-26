@@ -113,6 +113,9 @@ public class Tank {
 		default:
 			break;
 		}
+		if (this.group == Group.good) {
+			new Thread(() -> new Audio("audio/tank_move.wav").loop()).start();
+		}
 		//只有敌人的坦克移动的时候才会自动发射子弹
 		if (this.group == Group.bad) {
 			if (random.nextInt(10) > 8) {	
@@ -126,11 +129,13 @@ public class Tank {
 		int bx = x + width/2 - Bullet.width/2;
 		int by = y + height/2 - Bullet.height/2;
 		tf.bullets.add(new Bullet(bx, by, dir,this.group,tf));
+		if (this.group == Group.good) {
+			new Thread(() -> new Audio("audio/tank_fire.wav").loop()).start();
+		}
 	}
 	public void die() {
 		this.living = false;
-		tf.explode = new Explode(x, y);
-		
+		tf.explodes.add(new Explode(x, y - height/2, tf));
 	}
 	
 	

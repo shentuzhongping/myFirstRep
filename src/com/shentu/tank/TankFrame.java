@@ -17,15 +17,15 @@ public class TankFrame extends Frame {
 	boolean down = false;
 	boolean left = false;
 	boolean right = false;
-	final int GAME_WIDTH = 800,GAME_HEIGHT = 600;
+	static final int GAME_WIDTH = 800,GAME_HEIGHT = 600;
 	
-	Tank tank = new Tank(200,200,Dir.UP,3,Group.good,this);
 	List<Bullet> bullets = new ArrayList<>();
 	static List<Tank> enemyTanks = new ArrayList<>();
+	static List<Explode> explodes = new ArrayList<>();
 	
-	Explode explode;
+	Tank tank = new Tank(200,200,Dir.UP,3,Group.good,this);
 	TankFrame () {
-		setSize(800,600);
+		setSize(GAME_WIDTH,GAME_HEIGHT);
 		setResizable(false);
 		setTitle("tank war");
 		setVisible(true);
@@ -56,10 +56,18 @@ public class TankFrame extends Frame {
 	}
 	
 	//解决容器可能内存溢出问题
+	@Override
 	public void paint(Graphics g) {
 //		explode.paint(g);
+		Color c = g.getColor();
+		g.setColor(Color.WHITE);
+		g.drawString("子弹的数量:" + bullets.size(), 10, 60);
+		g.drawString("敌人的数量:" + enemyTanks.size(), 10, 80);
+		g.drawString("爆炸的数量:" + explodes.size(), 10, 100);
+		g.setColor(c);
 		tank.paint(g);
 		
+		//画出剩余的敌人坦克
 		for (Iterator i = enemyTanks.iterator(); i.hasNext();) {
 			Tank tank = (Tank) i.next();
 			if (!tank.isLiving()) {
@@ -68,6 +76,7 @@ public class TankFrame extends Frame {
 			}
 			tank.paint(g);
 		}
+		//画出剩余的子弹
 		for (Iterator i = bullets.iterator(); i.hasNext();) {
 			Bullet bullet = (Bullet) i.next();
 			if (!bullet.isLiving()) {
@@ -78,15 +87,15 @@ public class TankFrame extends Frame {
 			bullet.paint(g);
 		}
 		
+		//碰撞检测
 		for (int i = 0; i < bullets.size(); i++) {
 			for (int j = 0; j < enemyTanks.size(); j++) {
 				bullets.get(i).collideWith(enemyTanks.get(j));
 			}
 		}
-		
-		if(explode != null) {
-			explode.paint(g);
-			if(!explode.isLiving()) explode = null;
+		//画出爆炸的动画
+		for (int i = 0; i < explodes.size(); i++) {
+			explodes.get(i).paint(g);
 		}
 		
 	}

@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import org.junit.Test;
 
+import com.shentu.tank.ImageUtil;
 import com.shentu.tank.ResourceMagr;
 
 public class TankTest {
@@ -16,7 +17,7 @@ public class TankTest {
 	@Test
 	public void test() {
 		try {
-			BufferedImage tankU = ImageIO.read(ResourceMagr.class.getClassLoader().getResourceAsStream("images/tankU.gif"));
+			BufferedImage tankU = ImageIO.read(ResourceMagr.class.getClassLoader().getResourceAsStream("images/bulletU.png"));
 			assertNotNull(tankU);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

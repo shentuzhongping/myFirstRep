@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.shentu.tank.factory.BulletModel;
+import com.shentu.tank.factory.TankModel;
+
 public class TankFrame extends Frame {
 	boolean up = false;
 	boolean down = false;
@@ -19,8 +22,8 @@ public class TankFrame extends Frame {
 	boolean right = false;
 	static final int GAME_WIDTH = 1080,GAME_HEIGHT = 720;
 	
-	List<Bullet> bullets = new ArrayList<>();
-	static List<Tank> enemyTanks = new ArrayList<>();
+	List<BulletModel> bullets = new ArrayList<>();
+	static List<TankModel> enemyTanks = new ArrayList<>();
 	static List<Explode> explodes = new ArrayList<>();
 	
 	Tank tank = new Tank(200,200,Dir.UP,3,Group.good,this);

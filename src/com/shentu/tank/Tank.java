@@ -4,7 +4,10 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
 
-public class Tank {
+import com.shentu.tank.factory.EnemyFactory;
+import com.shentu.tank.factory.TankModel;
+
+public class Tank extends TankModel{
 	private int x;
 	private int y;
 	private Dir dir;
@@ -30,7 +33,7 @@ public class Tank {
 	
 	Rectangle rect = new Rectangle(0,0,width,height);
 	
-	Tank (int x,int y, Dir dir,boolean moving,Group group,TankFrame tf) {
+	public Tank (int x,int y, Dir dir,boolean moving,Group group,TankFrame tf) {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
@@ -172,7 +175,7 @@ public class Tank {
 		}
 		int bx = x + width/2 - Bullet.width/2;
 		int by = y + height/2 - Bullet.height/2;
-		new Bullet(bx, by, dir,this.group,tf);
+		EnemyFactory.getInstance().creatBullet(tf, this);
 		if (this.group == Group.good) {
 			new Thread(() -> new Audio("audio/tank_fire.wav").loop()).start();
 		}

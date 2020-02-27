@@ -8,10 +8,10 @@ import javax.imageio.ImageIO;
 public class ResourceMagr {
 	
 	private static ResourceMagr rm;
-	static BufferedImage goodTankU,goodTankD,goodTankL,goodTankR;
-	static BufferedImage badTankU,badTankD,badTankL,badTankR;
-	static BufferedImage bulletU,bulletD,bulletL,bulletR;
-	static BufferedImage[] explodes = new BufferedImage[16];
+	public static BufferedImage goodTankU,goodTankD,goodTankL,goodTankR;
+	public static BufferedImage badTankU,badTankD,badTankL,badTankR;
+	public static BufferedImage bulletU,bulletD,bulletL,bulletR;
+	public static BufferedImage[] explodes = new BufferedImage[16];
 	
 //	static {
 //		try {

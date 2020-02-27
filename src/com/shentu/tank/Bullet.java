@@ -3,7 +3,10 @@ package com.shentu.tank;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-public class Bullet {
+import com.shentu.tank.factory.BulletModel;
+import com.shentu.tank.factory.TankModel;
+
+public class Bullet extends BulletModel{
 	private int x;
 	private int y;
 	private Dir dir;
@@ -23,7 +26,8 @@ public class Bullet {
 	Rectangle rect = new Rectangle(0,0,1,1);
 	private TankFrame tf;
 	
-	Bullet (int x, int y, Dir dir,Group group,TankFrame tf) {
+	public Bullet (int x, int y, Dir dir,Group group,TankFrame tf) {
+		super(x,y);
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
@@ -109,7 +113,9 @@ public class Bullet {
 	}
 	
 	
-	public void collideWith (Tank t) {
+	public void collideWith (TankModel tm) {
+		//如果不这样转，要改很多东西
+		Tank t = (Tank) tm;
 		if (this.group == t.getGroup()) return;
 //		Rectangle rect1 = new Rectangle(t.getX(),t.getY(),t.width,t.height);
 //		Rectangle rect2 = new Rectangle(x+width/2,y+height/2,1,1);

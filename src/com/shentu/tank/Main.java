@@ -1,5 +1,6 @@
 package com.shentu.tank;
 
+import com.shentu.tank.factory.EnemyFactory;
 
 public class Main {
 	public static void main(String[] args) {
@@ -8,9 +9,11 @@ public class Main {
 		
 		TankFrame tf = new TankFrame();
 		
+		EnemyFactory ef = EnemyFactory.getInstance();
+		
 		int tankCount = Integer.parseInt(PropertyMagr.get("initTankCount"));
 		for (int i = 0; i < tankCount; i++) {
-			tf.enemyTanks.add(new Tank(50 + i*80,50, Dir.DOWN,true,Group.bad, tf));
+			tf.enemyTanks.add(ef.creatTank(tf));
 		}
 		
 		while (true) {

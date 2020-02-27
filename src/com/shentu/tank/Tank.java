@@ -82,6 +82,13 @@ public class Tank {
 	public void setMoving(boolean moving) {
 		this.moving = moving;
 	}
+	public TankFrame getTf() {
+		return tf;
+	}
+	public void setTf(TankFrame tf) {
+		this.tf = tf;
+	}
+	
 	
 	public void paint(Graphics g) {	
 		switch (dir) {
@@ -159,9 +166,13 @@ public class Tank {
 		this.dir = Dir.values()[random.nextInt(4)];
 	}
 	public void fire() {
+		if (this.group == Group.good) {
+			FourDirFire ff = FourDirFire.getInstance();
+			ff.fire(this);
+		}
 		int bx = x + width/2 - Bullet.width/2;
 		int by = y + height/2 - Bullet.height/2;
-		tf.bullets.add(new Bullet(bx, by, dir,this.group,tf));
+		new Bullet(bx, by, dir,this.group,tf);
 		if (this.group == Group.good) {
 			new Thread(() -> new Audio("audio/tank_fire.wav").loop()).start();
 		}

@@ -31,6 +31,7 @@ public class Bullet {
 		this.tf = tf;
 		this.rect.x = x + width/2;
 		this.rect.y = y + height/2;
+		tf.bullets.add(this);
 	}
 	
 	public int getX() {

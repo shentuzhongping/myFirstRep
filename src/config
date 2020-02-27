@@ -1,2 +1,6 @@
 # tanks count at initialization
 initTankCount = 10
+#goodFs = com.shentu.tank.FourDirFire;
+#配置文件的语句不能有“；”
+goodFs = com.shentu.tank.FourDirFire
+defaultFs = com.shentu.tank.DefaultFire

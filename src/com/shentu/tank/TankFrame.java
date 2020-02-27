@@ -17,7 +17,7 @@ public class TankFrame extends Frame {
 	boolean down = false;
 	boolean left = false;
 	boolean right = false;
-	static final int GAME_WIDTH = 800,GAME_HEIGHT = 600;
+	static final int GAME_WIDTH = 1080,GAME_HEIGHT = 720;
 	
 	List<Bullet> bullets = new ArrayList<>();
 	static List<Tank> enemyTanks = new ArrayList<>();

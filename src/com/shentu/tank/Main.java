@@ -10,7 +10,7 @@ public class Main {
 		
 		int tankCount = Integer.parseInt(PropertyMagr.get("initTankCount"));
 		for (int i = 0; i < tankCount; i++) {
-			tf.enemyTanks.add(new Tank(50 + i*80,50, Dir.DOWN,true,Group.bad, tf));
+			tf.gm.enemyTanks.add(new Tank(50 + i*80,50, Dir.DOWN,true,Group.bad));
 		}
 		
 		while (true) {

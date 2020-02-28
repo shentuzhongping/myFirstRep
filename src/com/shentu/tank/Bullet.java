@@ -21,17 +21,17 @@ public class Bullet {
 	public static int height = ResourceMagr.bulletD.getHeight();
 	
 	Rectangle rect = new Rectangle(0,0,1,1);
-	private TankFrame tf;
+	public static GameModel gm = GameModel.getInstance();
 	
-	Bullet (int x, int y, Dir dir,Group group,TankFrame tf) {
+	public Bullet (int x, int y, Dir dir,Group group) {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
 		this.group = group;
-		this.tf = tf;
+		this.gm = gm;
 		this.rect.x = x + width/2;
 		this.rect.y = y + height/2;
-		tf.bullets.add(this);
+		gm.bullets.add(this);
 	}
 	
 	public int getX() {
@@ -97,7 +97,7 @@ public class Bullet {
 		default:
 			break;
 		}
-		if (x < 0 || y < 0 || x > tf.GAME_WIDTH || y > tf.GAME_HEIGHT) {
+		if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
 			this.living = false;
 		}
 		this.rect.x = x + width/2;

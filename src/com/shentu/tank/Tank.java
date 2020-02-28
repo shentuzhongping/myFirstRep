@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
 
+import com.shentu.tank.strategy.FourDirFire;
+
 public class Tank {
 	private int x;
 	private int y;
@@ -15,7 +17,7 @@ public class Tank {
 	private int speed = 2;
 	
 	private Random random = new Random();
-	private GameModel gm;
+	public static GameModel gm = GameModel.getInstance();
 	
 	public static int width = ResourceMagr.badTankD.getWidth();
 	public static int height = ResourceMagr.badTankD.getHeight();
@@ -30,24 +32,22 @@ public class Tank {
 	
 	Rectangle rect = new Rectangle(0,0,width,height);
 	
-	Tank (int x,int y, Dir dir,boolean moving,Group group,GameModel gm) {
+	Tank (int x,int y, Dir dir,boolean moving,Group group) {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
 		this.moving = moving;
 		this.group = group;
-		this.gm = gm;
 		this.rect.x = x;
 		this.rect.y = y;
 	}
 	
-	Tank (int x,int y, Dir dir,int speed,Group group,GameModel gm) {
+	Tank (int x,int y, Dir dir,int speed,Group group) {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
 		this.speed = speed;
 		this.group = group;
-		this.gm = gm;
 		this.rect.x = x;
 		this.rect.y = y;
 	}
@@ -81,12 +81,6 @@ public class Tank {
 	}
 	public void setMoving(boolean moving) {
 		this.moving = moving;
-	}
-	public TankFrame getTf() {
-		return tf;
-	}
-	public void setTf(TankFrame tf) {
-		this.tf = tf;
 	}
 	
 	
@@ -150,14 +144,14 @@ public class Tank {
 		if (x < 2) {
 			x =2;
 		}
-		if (x > tf.GAME_WIDTH - width ) {
-			x = tf.GAME_WIDTH - width;
+		if (x > TankFrame.GAME_WIDTH - width ) {
+			x = TankFrame.GAME_WIDTH - width;
 		}
 		if ( y < height/2) {
 			y = height/2;
 		}
-		if ( y > tf.GAME_HEIGHT -height) {
-			y = tf.GAME_HEIGHT -height;
+		if ( y > TankFrame.GAME_HEIGHT -height) {
+			y = TankFrame.GAME_HEIGHT -height;
 		}
 		
 	}
@@ -169,17 +163,15 @@ public class Tank {
 		if (this.group == Group.good) {
 			FourDirFire ff = FourDirFire.getInstance();
 			ff.fire(this);
+			new Thread(() -> new Audio("audio/tank_fire.wav").loop()).start();
 		}
 		int bx = x + width/2 - Bullet.width/2;
 		int by = y + height/2 - Bullet.height/2;
-		new Bullet(bx, by, dir,this.group,tf);
-		if (this.group == Group.good) {
-			new Thread(() -> new Audio("audio/tank_fire.wav").loop()).start();
-		}
+		new Bullet(bx, by, dir,this.group);
 	}
 	public void die() {
 		this.living = false;
-		tf.explodes.add(new Explode(x, y - height/2, tf));
+		gm.explodes.add(new Explode(x, y - height/2, gm));
 	}
 	
 	

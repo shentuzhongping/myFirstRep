@@ -5,17 +5,17 @@ import java.awt.Graphics;
 public class Explode {
 	private int x;
 	private int y;
-	private TankFrame tf;
+	public static GameModel gm = GameModel.getInstance();
 //	private boolean living = true;
 	public static int width = ResourceMagr.explodes[0].getWidth();
 	public static int height = ResourceMagr.explodes[0].getHeight();
 	
 	private int step = 0;
 	
-	public Explode(int x,int y,TankFrame tf) { 
+	public Explode(int x,int y,GameModel gm) { 
 		this.x = x;
 		this.y = y;
-		this.tf = tf;
+		this.gm = gm;
 //		new Audio("audio/explode.wav").loop();
 	}
 	
@@ -25,7 +25,7 @@ public class Explode {
 		}
 		g.drawImage(ResourceMagr.explodes[step++], x, y, null);
 		if (step >= ResourceMagr.explodes.length ) {
-			tf.explodes.remove(this);
+			gm.explodes.remove(this);
 		}
 		
 	}

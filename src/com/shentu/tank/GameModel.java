@@ -13,12 +13,19 @@ import java.util.List;
  *
  */
 public class GameModel {
+	private static final GameModel gm = new GameModel();
 	
+	private GameModel(){}
+	
+	public static GameModel getInstance() {
+		return gm;
+	}
 	List<Bullet> bullets = new ArrayList<>();
 	static List<Tank> enemyTanks = new ArrayList<>();
 	static List<Explode> explodes = new ArrayList<>();
+	Tank tank = new Tank(200,200,Dir.UP,3,Group.good);
 	
-	Tank tank = new Tank(200,200,Dir.UP,3,Group.good,this);
+	
 	
 	public void paint(Graphics g) {
 		Color c = g.getColor();

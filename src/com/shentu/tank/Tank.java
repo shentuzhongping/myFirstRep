@@ -15,7 +15,7 @@ public class Tank {
 	private int speed = 2;
 	
 	private Random random = new Random();
-	private TankFrame tf;
+	private GameModel gm;
 	
 	public static int width = ResourceMagr.badTankD.getWidth();
 	public static int height = ResourceMagr.badTankD.getHeight();
@@ -30,24 +30,24 @@ public class Tank {
 	
 	Rectangle rect = new Rectangle(0,0,width,height);
 	
-	Tank (int x,int y, Dir dir,boolean moving,Group group,TankFrame tf) {
+	Tank (int x,int y, Dir dir,boolean moving,Group group,GameModel gm) {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
 		this.moving = moving;
 		this.group = group;
-		this.tf = tf;
+		this.gm = gm;
 		this.rect.x = x;
 		this.rect.y = y;
 	}
 	
-	Tank (int x,int y, Dir dir,int speed,Group group,TankFrame tf) {
+	Tank (int x,int y, Dir dir,int speed,Group group,GameModel gm) {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
 		this.speed = speed;
 		this.group = group;
-		this.tf = tf;
+		this.gm = gm;
 		this.rect.x = x;
 		this.rect.y = y;
 	}

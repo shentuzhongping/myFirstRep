@@ -19,11 +19,9 @@ public class TankFrame extends Frame {
 	boolean right = false;
 	static final int GAME_WIDTH = 1080,GAME_HEIGHT = 720;
 	
-	List<Bullet> bullets = new ArrayList<>();
-	static List<Tank> enemyTanks = new ArrayList<>();
-	static List<Explode> explodes = new ArrayList<>();
+	GameModel gm = new GameModel();
 	
-	Tank tank = new Tank(200,200,Dir.UP,3,Group.good,this);
+	
 	TankFrame () {
 		setSize(GAME_WIDTH,GAME_HEIGHT);
 		setResizable(false);
@@ -59,53 +57,12 @@ public class TankFrame extends Frame {
 	@Override
 	public void paint(Graphics g) {
 //		explode.paint(g);
-		Color c = g.getColor();
-		g.setColor(Color.WHITE);
-		g.drawString("子弹的数量:" + bullets.size(), 10, 60);
-		g.drawString("敌人的数量:" + enemyTanks.size(), 10, 80);
-		g.drawString("爆炸的数量:" + explodes.size(), 10, 100);
-		g.setColor(c);
-		tank.paint(g);
-		
-		//画出剩余的敌人坦克
-		for (Iterator i = enemyTanks.iterator(); i.hasNext();) {
-			Tank tank = (Tank) i.next();
-			if (!tank.isLiving()) {
-				i.remove();
-				continue;
-			}
-			tank.paint(g);
-		}
-		//画出剩余的子弹
-		for (Iterator i = bullets.iterator(); i.hasNext();) {
-			Bullet bullet = (Bullet) i.next();
-			if (!bullet.isLiving()) {
-				i.remove();
-				continue;
-			}
-			
-			bullet.paint(g);
-		}
-		
-		//碰撞检测
-		for (int i = 0; i < bullets.size(); i++) {
-			for (int j = 0; j < enemyTanks.size(); j++) {
-				bullets.get(i).collideWith(enemyTanks.get(j));
-			}
-		}
-		//画出爆炸的动画
-		for (int i = 0; i < explodes.size(); i++) {
-			explodes.get(i).paint(g);
-		}
-		
+		gm.paint(g);
 	}
 	
-	
-	
 	class TankKeyMonitor extends KeyAdapter {
-		
+		Tank tank = gm.tank;
 		private void setMainTankDir() {
-			
 			if(!up && !down && !left && !right) {
 				tank.setMoving(false);
 			} else {

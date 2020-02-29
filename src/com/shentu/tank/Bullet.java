@@ -3,24 +3,13 @@ package com.shentu.tank;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-public class Bullet {
-	private int x;
-	private int y;
+public class Bullet extends GameObject{
 	private Dir dir;
 	private static final int speed = 10;
-	private boolean living = true;
-	private Group group;
-	public boolean isLiving() {
-		return living;
-	}
-	public boolean getLiving() {
-		return living;
-	}
 
 	public static int width = ResourceMagr.bulletD.getWidth();
 	public static int height = ResourceMagr.bulletD.getHeight();
 	
-	Rectangle rect = new Rectangle(0,0,1,1);
 	public static GameModel gm = GameModel.getInstance();
 	
 	public Bullet (int x, int y, Dir dir,Group group) {
@@ -28,10 +17,11 @@ public class Bullet {
 		this.y = y;
 		this.dir = dir;
 		this.group = group;
-		this.gm = gm;
 		this.rect.x = x + width/2;
 		this.rect.y = y + height/2;
-		gm.bullets.add(this);
+		this.rect.height = 1;
+		this.rect.width = 1;
+		gm.objects.add(this);
 	}
 	
 	public int getX() {
@@ -99,6 +89,7 @@ public class Bullet {
 		}
 		if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
 			this.living = false;
+			gm.objects.remove(this);
 		}
 		this.rect.x = x + width/2;
 		this.rect.y = y + height/2;
@@ -108,15 +99,5 @@ public class Bullet {
 		this.living = false;
 	}
 	
-	
-	public void collideWith (Tank t) {
-		if (this.group == t.getGroup()) return;
-//		Rectangle rect1 = new Rectangle(t.getX(),t.getY(),t.width,t.height);
-//		Rectangle rect2 = new Rectangle(x+width/2,y+height/2,1,1);
-		if (t.rect.intersects(rect)) {
-			t.die();
-			this.die();
-		}
-	}
 
 }

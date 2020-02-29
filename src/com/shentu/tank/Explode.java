@@ -2,9 +2,7 @@ package com.shentu.tank;
 
 import java.awt.Graphics;
 
-public class Explode {
-	private int x;
-	private int y;
+public class Explode extends GameObject{
 	public static GameModel gm = GameModel.getInstance();
 //	private boolean living = true;
 	public static int width = ResourceMagr.explodes[0].getWidth();
@@ -12,10 +10,10 @@ public class Explode {
 	
 	private int step = 0;
 	
-	public Explode(int x,int y,GameModel gm) { 
+	public Explode(int x,int y) { 
 		this.x = x;
 		this.y = y;
-		this.gm = gm;
+		gm.objects.add(this);
 //		new Audio("audio/explode.wav").loop();
 	}
 	
@@ -25,7 +23,7 @@ public class Explode {
 		}
 		g.drawImage(ResourceMagr.explodes[step++], x, y, null);
 		if (step >= ResourceMagr.explodes.length ) {
-			gm.explodes.remove(this);
+			gm.objects.remove(this);
 		}
 		
 	}
@@ -44,6 +42,12 @@ public class Explode {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	@Override
+	public void die() {
+		// TODO Auto-generated method stub
+		
 	}
 
 //	public boolean isLiving() {

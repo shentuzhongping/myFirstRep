@@ -6,13 +6,10 @@ import java.util.Random;
 
 import com.shentu.tank.strategy.FourDirFire;
 
-public class Tank {
-	private int x;
-	private int y;
+public class Tank extends GameObject{
+	
 	private Dir dir;
 	private boolean moving = false;
-	
-	private Group group;
 	
 	private int speed = 2;
 	
@@ -22,15 +19,6 @@ public class Tank {
 	public static int width = ResourceMagr.badTankD.getWidth();
 	public static int height = ResourceMagr.badTankD.getHeight();
 	
-	private boolean living = true;
-	public boolean isLiving() {
-		return living;
-	}
-	public boolean getLiving() {
-		return living;
-	}
-	
-	Rectangle rect = new Rectangle(0,0,width,height);
 	
 	Tank (int x,int y, Dir dir,boolean moving,Group group) {
 		this.x = x;
@@ -40,6 +28,8 @@ public class Tank {
 		this.group = group;
 		this.rect.x = x;
 		this.rect.y = y;
+		this.rect.width = width;
+		this.rect.height = height;
 	}
 	
 	Tank (int x,int y, Dir dir,int speed,Group group) {
@@ -50,6 +40,8 @@ public class Tank {
 		this.group = group;
 		this.rect.x = x;
 		this.rect.y = y;
+		this.rect.width = width;
+		this.rect.height = height;
 	}
 	public int getX() {
 		return x;
@@ -101,6 +93,8 @@ public class Tank {
 		default:
 			break;
 		}
+		lastSeatX = x;
+		lastSeatY = y;
 		move();
 	}
 	
@@ -164,14 +158,20 @@ public class Tank {
 			FourDirFire ff = FourDirFire.getInstance();
 			ff.fire(this);
 			new Thread(() -> new Audio("audio/tank_fire.wav").loop()).start();
+		} else if (this.group == Group.bad) {
+			int bx = x + width/2 - Bullet.width/2;
+			int by = y + height/2 - Bullet.height/2;
+			new Bullet(bx, by, dir,this.group);
 		}
-		int bx = x + width/2 - Bullet.width/2;
-		int by = y + height/2 - Bullet.height/2;
-		new Bullet(bx, by, dir,this.group);
+	}
+	
+	public void back() {
+		x = lastSeatX;
+		y = lastSeatY;
 	}
 	public void die() {
 		this.living = false;
-		gm.explodes.add(new Explode(x, y - height/2, gm));
+		new Explode(x, y - height/2);
 	}
 	
 	

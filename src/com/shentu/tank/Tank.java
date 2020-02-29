@@ -14,7 +14,6 @@ public class Tank extends GameObject{
 	private int speed = 2;
 	
 	private Random random = new Random();
-	public static GameModel gm = GameModel.getInstance();
 	
 	public static int width = ResourceMagr.badTankD.getWidth();
 	public static int height = ResourceMagr.badTankD.getHeight();
@@ -117,9 +116,11 @@ public class Tank extends GameObject{
 		default:
 			break;
 		}
-		if (this.group == Group.good) {
-			new Thread(() -> new Audio("audio/tank_move.wav").loop()).start();
-		}
+		
+		//太吵
+//		if (this.group == Group.good) {
+//			new Thread(() -> new Audio("audio/tank_move.wav").loop()).start();
+//		}
 		//只有敌人的坦克移动的时候才会自动发射子弹
 		if (this.group == Group.bad && random.nextInt(100) > 95) {
 			this.fire();

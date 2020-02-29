@@ -12,6 +12,8 @@ public class ColliderChan{
 	public ColliderChan () {
 		addCollider(new TankBulletCollider());
 		addCollider(new TankTankCollider());
+		addCollider(new BulletWallCollider());
+		addCollider(new TankWallCollider());
 	}
 	
 	public void addCollider(Collider c) {

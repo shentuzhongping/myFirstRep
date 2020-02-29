@@ -8,11 +8,6 @@ public class Main {
 		
 		TankFrame tf = new TankFrame();
 		
-		int tankCount = Integer.parseInt(PropertyMagr.get("initTankCount"));
-		for (int i = 0; i < tankCount; i++) {
-			tf.gm.objects.add(new Tank(50 + i*80,50, Dir.DOWN,true,Group.bad));
-		}
-		
 		while (true) {
 			try {
 				Thread.sleep(50);

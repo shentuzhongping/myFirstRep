@@ -13,24 +13,60 @@ import com.shentu.tank.collider.ColliderChan;
  *
  */
 public class GameModel {
-	private static final GameModel gm = new GameModel();
+	private static final GameModel INSTANCE = new GameModel();
 	
-	private GameModel(){}
-	
-	public static GameModel getInstance() {
-		return gm;
+	static {	
+		INSTANCE.init();
 	}
 	
-	public List<GameObject> objects = new LinkedList<>();
+	public List<GameObject> objects = new LinkedList<>();;
 	
 	private ColliderChan chan = new ColliderChan();
 	
-	Tank tank = new Tank(200,200,Dir.UP,3,Group.good);
+	Tank tank;
+	
+	private GameModel(){
+	}
+	
+	public static GameModel getInstance() {
+		return INSTANCE;
+	}
+	
+	private void init() {
+		tank = new Tank(200,200,Dir.UP,3,Group.good);
+		
+		int tankCount = Integer.parseInt(PropertyMagr.get("initTankCount"));
+		for (int i = 0; i < tankCount; i++) {
+			objects.add(new Tank(50 + i*80,50, Dir.DOWN,true,Group.bad));
+		}
+		
+		new Wall(200,100,50,200);
+		new Wall(500,100,50,200);
+		new Wall(200,400,200,50);
+		new Wall(500,400,200,50);
+	}
+	
+	public void add(GameObject go) {
+		objects.add(go);
+	}
+	
+	public void remove(GameObject go) {
+		objects.remove(go);
+	}
 	
 	
 	public void paint(Graphics g) {
 
 		tank.paint(g);
+		
+		//碰撞检测
+		for (int i = 0; i < objects.size(); i++) {
+			for (int j = i+1; j < objects.size(); j++) {
+				GameObject o1 = objects.get(i);
+				GameObject o2 = objects.get(j);
+				chan.collide(o1, o2);
+			}
+		}
 		
 		for (int i = 0; i < objects.size(); i++) {
 			GameObject o = objects.get(i);
@@ -42,18 +78,7 @@ public class GameModel {
 			}
 		}
 		
-		//碰撞检测
-		for (int i = 0; i < objects.size(); i++) {
-			for (int j = i+1; j < objects.size(); j++) {
-				GameObject o1 = objects.get(i);
-				GameObject o2 = objects.get(j);
-//				if ( !chan.collide(o1, o2)) {
-//					System.out.println(objects.size());
-//					i--;
-//				}
-				chan.collide(o1, o2);
-			}
-		}
+		
 		
 	}
 }

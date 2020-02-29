@@ -1,7 +1,6 @@
 package com.shentu.tank;
 
 import java.awt.Graphics;
-import java.awt.Rectangle;
 
 public class Bullet extends GameObject{
 	private Dir dir;
@@ -9,8 +8,6 @@ public class Bullet extends GameObject{
 
 	public static int width = ResourceMagr.bulletD.getWidth();
 	public static int height = ResourceMagr.bulletD.getHeight();
-	
-	public static GameModel gm = GameModel.getInstance();
 	
 	public Bullet (int x, int y, Dir dir,Group group) {
 		this.x = x;
@@ -21,7 +18,7 @@ public class Bullet extends GameObject{
 		this.rect.y = y + height/2;
 		this.rect.height = 1;
 		this.rect.width = 1;
-		gm.objects.add(this);
+		GameModel.getInstance().add(this);
 	}
 	
 	public int getX() {
@@ -89,7 +86,7 @@ public class Bullet extends GameObject{
 		}
 		if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
 			this.living = false;
-			gm.objects.remove(this);
+			GameModel.getInstance().remove(this);
 		}
 		this.rect.x = x + width/2;
 		this.rect.y = y + height/2;

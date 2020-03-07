@@ -7,7 +7,7 @@ public class Main {
 		ResourceMagr resourceMagr = ResourceMagr.getInstance();
 		
 		TankFrame tf = new TankFrame();
-		
+
 		while (true) {
 			try {
 				Thread.sleep(50);

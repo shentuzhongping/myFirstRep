@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
 
+import com.shentu.tank.decorater.RectDecorater;
+import com.shentu.tank.decorater.TailDecorater;
 import com.shentu.tank.strategy.FourDirFire;
 
 public class Tank extends GameObject{
@@ -162,7 +164,8 @@ public class Tank extends GameObject{
 		} else if (this.group == Group.bad) {
 			int bx = x + width/2 - Bullet.width/2;
 			int by = y + height/2 - Bullet.height/2;
-			new Bullet(bx, by, dir,this.group);
+//			GameModel.getInstance().add(new TailDecorater(new RectDecorater(new Bullet(bx, by, dir,this.group))));
+			new Bullet(bx,by,dir,this.group);
 		}
 	}
 	

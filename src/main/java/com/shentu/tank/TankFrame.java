@@ -8,23 +8,24 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class TankFrame extends Frame {
+	public static final TankFrame TANK_FRAME = new TankFrame();
 	boolean up = false;
 	boolean down = false;
 	boolean left = false;
 	boolean right = false;
 	static final int GAME_WIDTH = 1080,GAME_HEIGHT = 720;
 	
-	List<Bullet> bullets = new ArrayList<>();
-	static List<Tank> enemyTanks = new ArrayList<>();
+	static List<Bullet> bullets = new ArrayList<>();
+	static Map<UUID, Tank> tanks = new HashMap<>();
 	static List<Explode> explodes = new ArrayList<>();
+
+	Random r = new Random();
 	
-	Tank tank = new Tank(200,200,Dir.UP,3,Group.good,this);
-	TankFrame () {
+	public Tank mainTank = new Tank(r.nextInt(GAME_WIDTH),r.nextInt(GAME_HEIGHT),Dir.UP,false,Group.good);
+	private TankFrame () {
 		setSize(GAME_WIDTH,GAME_HEIGHT);
 		setResizable(false);
 		setTitle("tank war");
@@ -38,6 +39,10 @@ public class TankFrame extends Frame {
 			}
 			
 		});
+	}
+
+	public void add(Tank t) {
+		tanks.put(t.id,t);
 	}
 	//解决双缓冲问题
 	Image offScreenImage = null;
@@ -62,20 +67,12 @@ public class TankFrame extends Frame {
 		Color c = g.getColor();
 		g.setColor(Color.WHITE);
 		g.drawString("子弹的数量:" + bullets.size(), 10, 60);
-		g.drawString("敌人的数量:" + enemyTanks.size(), 10, 80);
+		g.drawString("的数量:" + tanks.size(), 10, 80);
 		g.drawString("爆炸的数量:" + explodes.size(), 10, 100);
 		g.setColor(c);
-		tank.paint(g);
 		
 		//画出剩余的敌人坦克
-		for (Iterator i = enemyTanks.iterator(); i.hasNext();) {
-			Tank tank = (Tank) i.next();
-			if (!tank.isLiving()) {
-				i.remove();
-				continue;
-			}
-			tank.paint(g);
-		}
+		tanks.values().stream().forEach((e) -> e.paint(g));
 		//画出剩余的子弹
 		for (Iterator i = bullets.iterator(); i.hasNext();) {
 			Bullet bullet = (Bullet) i.next();
@@ -89,8 +86,8 @@ public class TankFrame extends Frame {
 		
 		//碰撞检测
 		for (int i = 0; i < bullets.size(); i++) {
-			for (int j = 0; j < enemyTanks.size(); j++) {
-				bullets.get(i).collideWith(enemyTanks.get(j));
+			for (int j = 0; j < tanks.size(); j++) {
+				bullets.get(i).collideWith(tanks.get(j));
 			}
 		}
 		//画出爆炸的动画
@@ -99,21 +96,24 @@ public class TankFrame extends Frame {
 		}
 		
 	}
-	
-	
-	
+
+	public boolean findByUUID(UUID id) {
+		return tanks.containsKey(id);
+	}
+
+
 	class TankKeyMonitor extends KeyAdapter {
 		
 		private void setMainTankDir() {
 			
 			if(!up && !down && !left && !right) {
-				tank.setMoving(false);
+				mainTank.setMoving(false);
 			} else {
-				tank.setMoving(true);
-				if(up) tank.setDir(Dir.UP);
-				if(down)  tank.setDir(Dir.DOWN);
-				if(left)  tank.setDir(Dir.LEFT);
-				if(right)  tank.setDir(Dir.RIGHT);
+				mainTank.setMoving(true);
+				if(up) mainTank.setDir(Dir.UP);
+				if(down)  mainTank.setDir(Dir.DOWN);
+				if(left)  mainTank.setDir(Dir.LEFT);
+				if(right)  mainTank.setDir(Dir.RIGHT);
 			}
 		}
 		@Override
@@ -133,7 +133,7 @@ public class TankFrame extends Frame {
 				right = false;
 				break;
 			case KeyEvent.VK_CONTROL:
-				tank.fire();
+				mainTank.fire();
 				break;
 			default:
 				break;

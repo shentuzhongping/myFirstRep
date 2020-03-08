@@ -1,5 +1,6 @@
 package com.shentu.netty;
 
+import com.shentu.tankChangeMsg.TankJoinMsg;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -7,6 +8,10 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class Client {
+    public static final Client INSTANCE = new Client();
+
+    private Client(){}
+
     Channel channel;
     public void connect() {
         EventLoopGroup group = new NioEventLoopGroup(1);
@@ -17,7 +22,8 @@ public class Client {
                                          @Override
                                          protected void initChannel(SocketChannel ch) throws Exception {
                                              System.out.println("channel初始化成功");
-                                             ch.pipeline().addLast(new MsgDecoder())
+                                             ch.pipeline()
+                                                     .addLast(new MsgDecoder())
                                                      .addLast(new MsgEncoder())
                                                      .addLast(new ClientChannelHandler());
                                          }
@@ -31,7 +37,7 @@ public class Client {
                 if (future.isSuccess()) {
                     channel = future.channel();
                 } else {
-                    System.out.println("channel 连接");
+                    System.out.println("channel 连接失败");
                 }
             }
         });
@@ -45,7 +51,11 @@ public class Client {
         }
     }
 
-    public static void main(String[] args) {
-        new Client().connect();
+    public void sendMsg(TankJoinMsg msg) {
+        channel.writeAndFlush(msg);
     }
+
+//    public static void main(String[] args) {
+//        new Client().connect();
+//    }
 }

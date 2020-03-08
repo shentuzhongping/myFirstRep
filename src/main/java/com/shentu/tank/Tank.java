@@ -1,14 +1,19 @@
 package com.shentu.tank;
 
+import com.shentu.tankChangeMsg.TankJoinMsg;
+
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
+import java.util.UUID;
 
 public class Tank {
     private int x;
     private int y;
     private Dir dir;
     private boolean moving = false;
+
+    public UUID id;
 
     private Group group;
 
@@ -32,27 +37,37 @@ public class Tank {
 
     Rectangle rect = new Rectangle(0, 0, width, height);
 
-    Tank(int x, int y, Dir dir, boolean moving, Group group, TankFrame tf) {
+    Tank(int x, int y, Dir dir, boolean moving, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.moving = moving;
         this.group = group;
-        this.tf = tf;
+        this.id = UUID.randomUUID();
         this.rect.x = x;
         this.rect.y = y;
+    }
+    public Tank (TankJoinMsg msg) {
+        this.x = msg.x;
+        this.y = msg.y;
+        this.dir = msg.dir;
+        this.moving = msg.moving;
+        this.group = msg.group;
+        this.id = msg.id;
+        this.rect.x = msg.x;
+        this.rect.y = msg.y;
     }
 
-    Tank(int x, int y, Dir dir, int speed, Group group, TankFrame tf) {
-        this.x = x;
-        this.y = y;
-        this.dir = dir;
-        this.speed = speed;
-        this.group = group;
-        this.tf = tf;
-        this.rect.x = x;
-        this.rect.y = y;
-    }
+//    Tank(int x, int y, Dir dir, int speed, Group group, TankFrame tf) {
+//        this.x = x;
+//        this.y = y;
+//        this.dir = dir;
+//        this.speed = speed;
+//        this.group = group;
+//        this.tf = tf;
+//        this.rect.x = x;
+//        this.rect.y = y;
+//    }
 
     public int getX() {
         return x;

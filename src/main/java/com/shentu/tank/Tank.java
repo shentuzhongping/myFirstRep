@@ -148,17 +148,17 @@ public class Tank {
             default:
                 break;
         }
-        if (this.group == Group.good) {
-            new Thread(() -> new Audio("audio/tank_move.wav").loop()).start();
-        }
-        //只有敌人的坦克移动的时候才会自动发射子弹
-        if (this.group == Group.bad && random.nextInt(100) > 95) {
-            this.fire();
-        }
-        //只有敌人的坦克才会随机换方向
-        if (this.group == Group.bad && random.nextInt(100) > 95) {
-            randomDir();
-        }
+//        if (this.group == Group.good) {
+//            new Thread(() -> new Audio("audio/tank_move.wav").loop()).start();
+//        }
+//        //只有敌人的坦克移动的时候才会自动发射子弹
+//        if (this.group == Group.bad && random.nextInt(100) > 95) {
+//            this.fire();
+//        }
+//        //只有敌人的坦克才会随机换方向
+//        if (this.group == Group.bad && random.nextInt(100) > 95) {
+//            randomDir();
+//        }
 
         boundsCheck();
         this.rect.x = x;
@@ -190,9 +190,9 @@ public class Tank {
         int bx = x + width / 2 - Bullet.width / 2;
         int by = y + height / 2 - Bullet.height / 2;
         tf.bullets.add(new Bullet(bx, by, dir, this.group, tf));
-        if (this.group == Group.good) {
-            new Thread(() -> new Audio("audio/tank_fire.wav").loop()).start();
-        }
+//        if (this.group == Group.good) {
+//            new Thread(() -> new Audio("audio/tank_fire.wav").loop()).start();
+//        }
     }
 
     public void die() {

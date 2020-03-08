@@ -4,6 +4,7 @@ import com.shentu.tank.Dir;
 import com.shentu.tank.Group;
 import com.shentu.tank.Tank;
 import com.shentu.tank.TankFrame;
+import com.shentu.tankChangeMsg.Msg;
 import com.shentu.tankChangeMsg.TankJoinMsg;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -11,7 +12,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.UUID;
 
-public class ClientChannelHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
+public class ClientChannelHandler extends SimpleChannelInboundHandler<Msg> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -21,13 +22,7 @@ public class ClientChannelHandler extends SimpleChannelInboundHandler<TankJoinMs
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) throws Exception {
-
+    protected void channelRead0(ChannelHandlerContext ctx, Msg msg) throws Exception {
         msg.handle();
-        if (msg.id == TankFrame.TANK_FRAME.mainTank.id ||
-                TankFrame.TANK_FRAME.findByUUID(msg.id)) return;
-        System.out.println(msg);
-        TankFrame.TANK_FRAME.add(new Tank(msg));
-        ctx.writeAndFlush(new TankJoinMsg(TankFrame.TANK_FRAME.mainTank));
     }
 }

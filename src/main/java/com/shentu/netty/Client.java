@@ -1,5 +1,6 @@
 package com.shentu.netty;
 
+import com.shentu.tankChangeMsg.Msg;
 import com.shentu.tankChangeMsg.TankJoinMsg;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -51,7 +52,7 @@ public class Client {
         }
     }
 
-    public void sendMsg(TankJoinMsg msg) {
+    public void sendMsg(Msg msg) {
         channel.writeAndFlush(msg);
     }
 

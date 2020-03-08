@@ -1,5 +1,8 @@
 package com.shentu.tank;
 
+import com.shentu.netty.Client;
+import com.shentu.tankChangeMsg.TankStartMovingMsg;
+
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -73,6 +76,8 @@ public class TankFrame extends Frame {
 		
 		//画出剩余的敌人坦克
 		tanks.values().stream().forEach((e) -> e.paint(g));
+
+
 		//画出剩余的子弹
 		for (Iterator i = bullets.iterator(); i.hasNext();) {
 			Bullet bullet = (Bullet) i.next();
@@ -97,8 +102,12 @@ public class TankFrame extends Frame {
 		
 	}
 
-	public boolean findByUUID(UUID id) {
-		return tanks.containsKey(id);
+	public Tank findByUUID(UUID id) {
+		if (tanks.containsKey(id)) {
+			Tank t = tanks.get(id);
+			return t;
+		}
+		return null;
 	}
 
 
@@ -109,11 +118,14 @@ public class TankFrame extends Frame {
 			if(!up && !down && !left && !right) {
 				mainTank.setMoving(false);
 			} else {
-				mainTank.setMoving(true);
 				if(up) mainTank.setDir(Dir.UP);
 				if(down)  mainTank.setDir(Dir.DOWN);
 				if(left)  mainTank.setDir(Dir.LEFT);
 				if(right)  mainTank.setDir(Dir.RIGHT);
+				if ( !mainTank.isMoving()) {
+					mainTank.setMoving(true);
+					Client.INSTANCE.sendMsg(new TankStartMovingMsg(mainTank));
+				}
 			}
 		}
 		@Override
@@ -161,7 +173,7 @@ public class TankFrame extends Frame {
 			default:
 				break;
 			}
-			
+
 			setMainTankDir();
 		}
 		

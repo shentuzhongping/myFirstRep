@@ -1,32 +1,30 @@
 package com.shentu.tankChangeMsg;
 
-import com.shentu.netty.Client;
 import com.shentu.tank.Dir;
-import com.shentu.tank.Group;
 import com.shentu.tank.Tank;
 import com.shentu.tank.TankFrame;
 
 import java.io.*;
 import java.util.UUID;
 
-public class TankStartMovingMsg extends Msg{
+public class TankStopMsg extends Msg{
     public int x;
     public int y;
     public Dir dir;
     public UUID id;
 
 
-    public TankStartMovingMsg() {
+    public TankStopMsg() {
     }
 
 
-    public TankStartMovingMsg(int x, int y, Dir dir,UUID id) {
+    public TankStopMsg(int x, int y, Dir dir, UUID id) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.id = id;
     }
-    public TankStartMovingMsg(Tank t) {
+    public TankStopMsg(Tank t) {
         this.x = t.getX();
         this.y = t.getY();
         this.dir = t.getDir();
@@ -90,12 +88,12 @@ public class TankStartMovingMsg extends Msg{
 
     @Override
     public MsgType getMsgType() {
-        return MsgType.TankStartMoving;
+        return MsgType.TankStop;
     }
 
     @Override
     public String toString() {
-        return "TankStartMovingMsg{" +
+        return "TankStopMsg{" +
                 "x=" + x +
                 ", y=" + y +
                 ", dir=" + dir +
@@ -110,7 +108,7 @@ public class TankStartMovingMsg extends Msg{
         Tank t = TankFrame.TANK_FRAME.findByUUID(this.id);
         if (t != null) {
             t.setDir(this.dir);
-            t.setMoving(true);
+            t.setMoving(false);
             t.setX(this.x);
             t.setY(this.y);
         }

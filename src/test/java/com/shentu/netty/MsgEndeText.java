@@ -1,11 +1,9 @@
 package com.shentu.netty;
 
+import com.shentu.tank.Bullet;
 import com.shentu.tank.Dir;
 import com.shentu.tank.Group;
-import com.shentu.tankChangeMsg.Msg;
-import com.shentu.tankChangeMsg.MsgType;
-import com.shentu.tankChangeMsg.TankJoinMsg;
-import com.shentu.tankChangeMsg.TankStartMovingMsg;
+import com.shentu.tankChangeMsg.*;
 import org.junit.Assert;
 import org.junit.Test;
 import io.netty.buffer.ByteBuf;
@@ -36,18 +34,24 @@ public class MsgEndeText {
 	public void tankMsgDecoderText1 () {
 		EmbeddedChannel ch = new EmbeddedChannel(new MsgEncoder(),new MsgDecoder());
 		UUID id = UUID.randomUUID();
-		TankStartMovingMsg msg = new TankStartMovingMsg(5,10,Dir.RIGHT,id);
+//		TankStartMovingMsg msg = new TankStartMovingMsg(5,10,Dir.RIGHT,id);
+//		TankDirChangedMsg msg = new TankDirChangedMsg(5,10,Dir.RIGHT,id);
+		BulletNewMsg msg = new BulletNewMsg(5,10,Dir.RIGHT,Group.good,UUID.randomUUID(),UUID.randomUUID());
 		ch.writeOutbound(msg);
 		ByteBuf buf = ch.readOutbound();
-		Assert.assertTrue(MsgType.values()[buf.readInt()].equals(MsgType.TankStartMoving));
+//		Assert.assertTrue(MsgType.values()[buf.readInt()].equals(MsgType.TankStartMoving));
+//		Assert.assertTrue(MsgType.values()[buf.readInt()].equals(MsgType.TankDirChanged));
+		Assert.assertTrue(MsgType.values()[buf.readInt()].equals(MsgType.BulletNew));
 		buf.readInt();
 		Assert.assertTrue(buf.readInt() == 5);
 		Assert.assertTrue(buf.readInt() == 10);
 		Assert.assertTrue(Dir.values()[buf.readInt()].equals(Dir.RIGHT));
-		Assert.assertTrue(new UUID(buf.readLong(),buf.readLong()).equals(id));
+//		Assert.assertTrue(new UUID(buf.readLong(),buf.readLong()).equals(id));
 
 		ByteBuf buf1 = Unpooled.buffer();
-		buf1.writeInt(MsgType.TankStartMoving.ordinal());
+//		buf1.writeInt(MsgType.TankStartMoving.ordinal());
+//		buf1.writeInt(MsgType.TankDirChanged.ordinal());
+		buf1.writeInt(MsgType.BulletNew.ordinal());
 		byte[] bytes = msg.toBytes();
 		buf1.writeInt(bytes.length);
 		buf1.writeBytes(bytes);

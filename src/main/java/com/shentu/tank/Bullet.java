@@ -1,7 +1,12 @@
 package com.shentu.tank;
 
+import com.shentu.netty.Client;
+import com.shentu.tankChangeMsg.BulletNewMsg;
+import com.shentu.tankChangeMsg.TankDieMsg;
+
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.UUID;
 
 public class Bullet {
 	private int x;
@@ -10,6 +15,8 @@ public class Bullet {
 	private static final int speed = 10;
 	private boolean living = true;
 	private Group group;
+	public UUID id;
+	public UUID playerId;
 	public boolean isLiving() {
 		return living;
 	}
@@ -21,16 +28,28 @@ public class Bullet {
 	public static int height = ResourceMagr.bulletD.getHeight();
 	
 	Rectangle rect = new Rectangle(0,0,1,1);
-	private TankFrame tf;
 	
-	Bullet (int x, int y, Dir dir,Group group,TankFrame tf) {
+	public Bullet (int x, int y, Dir dir,Group group) {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
 		this.group = group;
-		this.tf = tf;
+		this.id = UUID.randomUUID();
+		this.playerId = TankFrame.TANK_FRAME.mainTank.id;
 		this.rect.x = x + width/2;
 		this.rect.y = y + height/2;
+
+	}
+
+	public Bullet(BulletNewMsg msg) {
+		this.x = msg.x;
+		this.y = msg.y;
+		this.dir = msg.dir;
+		this.group = msg.group;
+		this.id = msg.id;
+		this.playerId = msg.playerID;
+		this.rect.x = msg.x + width/2;
+		this.rect.y = msg.y + height/2;
 	}
 	
 	public int getX() {
@@ -57,8 +76,14 @@ public class Bullet {
 		this.dir = dir;
 	}
 
-	
-	
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+
 	public void paint(Graphics g) {
 		switch (dir) {
 		case UP:
@@ -96,7 +121,7 @@ public class Bullet {
 		default:
 			break;
 		}
-		if (x < 0 || y < 0 || x > tf.GAME_WIDTH || y > tf.GAME_HEIGHT) {
+		if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
 			this.living = false;
 		}
 		this.rect.x = x + width/2;
@@ -104,18 +129,37 @@ public class Bullet {
 	}
 	
 	public void die() {
+//		System.out.print("消失的子弹：");
+//		System.out.println(this.playerId);
 		this.living = false;
 	}
 	
 	
-	public void collideWith (Tank t) {
-		if (this.group == t.getGroup()) return;
-//		Rectangle rect1 = new Rectangle(t.getX(),t.getY(),t.width,t.height);
-//		Rectangle rect2 = new Rectangle(x+width/2,y+height/2,1,1);
-		if (t.rect.intersects(rect)) {
-			t.die();
+	public void collideWith (Tank tank) {
+//		System.out.print("用于碰撞检测的子弹：");
+//		System.out.println(this.playerId);
+		if(this.playerId.equals(tank.id)) {
+			return;
+		}
+
+		if(this.living && tank.isLiving() && this.rect.intersects(tank.rect)) {
+			tank.die();
 			this.die();
+			Client.INSTANCE.sendMsg(new TankDieMsg(this.id, tank.id));
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "Bullet{" +
+				"x=" + x +
+				", y=" + y +
+				", dir=" + dir +
+				", living=" + living +
+				", group=" + group +
+				", id=" + id +
+				", playerId=" + playerId +
+				", rect=" + rect +
+				'}';
+	}
 }

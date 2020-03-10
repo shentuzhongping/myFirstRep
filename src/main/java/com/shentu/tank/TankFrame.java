@@ -1,7 +1,9 @@
 package com.shentu.tank;
 
 import com.shentu.netty.Client;
+import com.shentu.tankChangeMsg.TankDirChangedMsg;
 import com.shentu.tankChangeMsg.TankStartMovingMsg;
+import com.shentu.tankChangeMsg.TankStopMsg;
 
 import java.awt.Color;
 import java.awt.Frame;
@@ -21,9 +23,9 @@ public class TankFrame extends Frame {
 	boolean right = false;
 	static final int GAME_WIDTH = 1080,GAME_HEIGHT = 720;
 	
-	static List<Bullet> bullets = new ArrayList<>();
-	static Map<UUID, Tank> tanks = new HashMap<>();
-	static List<Explode> explodes = new ArrayList<>();
+	public static List<Bullet> bullets = new ArrayList<>();
+	public static Map<UUID, Tank> tanks = new HashMap<>();
+	public static List<Explode> explodes = new ArrayList<>();
 
 	Random r = new Random();
 	
@@ -46,6 +48,10 @@ public class TankFrame extends Frame {
 
 	public void add(Tank t) {
 		tanks.put(t.id,t);
+	}
+
+	public void addBullet(Bullet b) {
+		bullets.add(b);
 	}
 	//解决双缓冲问题
 	Image offScreenImage = null;
@@ -75,7 +81,16 @@ public class TankFrame extends Frame {
 		g.setColor(c);
 		
 		//画出剩余的敌人坦克
-		tanks.values().stream().forEach((e) -> e.paint(g));
+//		tanks.values().stream().forEach((e) -> e.paint(g));
+		Iterator<Map.Entry<UUID,Tank>> iterator = TankFrame.TANK_FRAME.tanks.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Map.Entry<UUID,Tank> entry = iterator.next();
+			if (!entry.getValue().isLiving()) {
+				iterator.remove();
+			} else {
+				entry.getValue().paint(g);
+			}
+		}
 
 
 		//画出剩余的子弹
@@ -85,14 +100,16 @@ public class TankFrame extends Frame {
 				i.remove();
 				continue;
 			}
-			
+//			System.out.print("bullets里面的子弹");
+//			System.out.println(bullet);
 			bullet.paint(g);
 		}
 		
 		//碰撞检测
+		Collection<Tank> values = tanks.values();
 		for (int i = 0; i < bullets.size(); i++) {
-			for (int j = 0; j < tanks.size(); j++) {
-				bullets.get(i).collideWith(tanks.get(j));
+			for(Tank t : values ) {
+				bullets.get(i).collideWith(t);
 			}
 		}
 		//画出爆炸的动画
@@ -109,6 +126,14 @@ public class TankFrame extends Frame {
 		}
 		return null;
 	}
+	public Bullet findBulletByUUID(UUID id) {
+		for(int i=0; i<bullets.size(); i++) {
+			if(bullets.get(i).id.equals(id))
+				return bullets.get(i);
+		}
+
+		return null;
+	}
 
 
 	class TankKeyMonitor extends KeyAdapter {
@@ -117,7 +142,9 @@ public class TankFrame extends Frame {
 			
 			if(!up && !down && !left && !right) {
 				mainTank.setMoving(false);
+				Client.INSTANCE.sendMsg(new TankStopMsg(mainTank));
 			} else {
+				Dir lastDir = mainTank.getDir();
 				if(up) mainTank.setDir(Dir.UP);
 				if(down)  mainTank.setDir(Dir.DOWN);
 				if(left)  mainTank.setDir(Dir.LEFT);
@@ -125,6 +152,10 @@ public class TankFrame extends Frame {
 				if ( !mainTank.isMoving()) {
 					mainTank.setMoving(true);
 					Client.INSTANCE.sendMsg(new TankStartMovingMsg(mainTank));
+				} else {
+					if (mainTank.getDir() != lastDir) {
+						Client.INSTANCE.sendMsg(new TankDirChangedMsg(mainTank));
+					}
 				}
 			}
 		}

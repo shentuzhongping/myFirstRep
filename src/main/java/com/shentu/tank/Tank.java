@@ -1,5 +1,7 @@
 package com.shentu.tank;
 
+import com.shentu.netty.Client;
+import com.shentu.tankChangeMsg.BulletNewMsg;
 import com.shentu.tankChangeMsg.TankJoinMsg;
 
 import java.awt.Graphics;
@@ -20,7 +22,6 @@ public class Tank {
     private int speed = 2;
 
     private Random random = new Random();
-    private TankFrame tf;
 
     public static int width = ResourceMagr.badTankD.getWidth();
     public static int height = ResourceMagr.badTankD.getHeight();
@@ -170,14 +171,14 @@ public class Tank {
         if (x < 2) {
             x = 2;
         }
-        if (x > tf.GAME_WIDTH - width) {
-            x = tf.GAME_WIDTH - width;
+        if (x > TankFrame.GAME_WIDTH - width) {
+            x = TankFrame.GAME_WIDTH - width;
         }
         if (y < height / 2) {
             y = height / 2;
         }
-        if (y > tf.GAME_HEIGHT - height) {
-            y = tf.GAME_HEIGHT - height;
+        if (y > TankFrame.GAME_HEIGHT - height) {
+            y = TankFrame.GAME_HEIGHT - height;
         }
 
     }
@@ -189,7 +190,11 @@ public class Tank {
     public void fire() {
         int bx = x + width / 2 - Bullet.width / 2;
         int by = y + height / 2 - Bullet.height / 2;
-        tf.bullets.add(new Bullet(bx, by, dir, this.group, tf));
+        Bullet bullet = new Bullet(bx, by, dir, this.group);
+        TankFrame.bullets.add(bullet);
+//        System.out.print("刚生成的子弹：");
+//        System.out.println(bullet);
+        Client.INSTANCE.sendMsg(new BulletNewMsg(bullet));
 //        if (this.group == Group.good) {
 //            new Thread(() -> new Audio("audio/tank_fire.wav").loop()).start();
 //        }
@@ -197,8 +202,25 @@ public class Tank {
 
     public void die() {
         this.living = false;
-        tf.explodes.add(new Explode(x, y - height / 2, tf));
+//        System.out.print("死掉的坦克");
+//        System.out.println(this.id);
+
+        TankFrame.explodes.add(new Explode(x, y - height / 2, TankFrame.TANK_FRAME));
     }
 
-
+    @Override
+    public String toString() {
+        return "Tank{" +
+                "x=" + x +
+                ", y=" + y +
+                ", dir=" + dir +
+                ", moving=" + moving +
+                ", id=" + id +
+                ", group=" + group +
+                ", speed=" + speed +
+                ", random=" + random +
+                ", living=" + living +
+                ", rect=" + rect +
+                '}';
+    }
 }
